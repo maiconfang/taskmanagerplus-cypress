@@ -19,8 +19,8 @@ describe('Login Tests', () => {
       cy.url().should('include', '/app'); // Check if the URL includes /app
       
       // Verify the presence of specific elements on the dashboard
-     // dashboardPage.isUserLinkPresent();
-    //  dashboardPage.isLogoutButtonPresent();
+      dashboardPage.isUserLinkPresent();
+      dashboardPage.isLogoutButtonPresent();
     });
   });
 
