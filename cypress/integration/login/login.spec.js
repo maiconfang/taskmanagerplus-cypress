@@ -1,25 +1,35 @@
+import InitialPage from '../../page-objects/initialPage';
+import LoginPage from '../../page-objects/loginPage';
+import DashboardPage from '../../page-objects/dashboardPage';
+
 describe('Login Tests', () => {
-    // Runs before each test in this block
-    beforeEach(() => {
-      cy.visit('/'); // Visit the home page
-      //   cy.get('a').contains('LOGIN').click(); // Click on the LOGIN menu item
-      cy.get('#navbar_login_link').click(); // Click on the LOGIN menu item by ID
-    });
-  
-    it('should log in successfully with valid credentials', () => {
-      cy.get('#login_username').type('luna.moon@maif.com'); // Type the valid username
-      cy.get('#login_password').type('123'); // Type the valid password
-      cy.get('#login_submit').click(); // Click the login button
-      cy.url().should('include', '/app'); // Check if the URL includes /dashboard
-    });
-  
-    it('should show error with invalid credentials', () => {
-      cy.get('#login_username').type('invalidUser'); // Type an invalid username
-      cy.get('#login_password').type('invalidPassword'); // Type an invalid password
-      cy.get('#login_submit').click(); // Click the login button
-      cy.get('.toast-error .toast-title') // Select the element with the error message
-      .should('be.visible') // Check that it is visible
-      .and('contain', 'Opps!!'); // Check that it contains the correct text
+  const initialPage = new InitialPage();
+  const loginPage = new LoginPage();
+  const dashboardPage = new DashboardPage();
+
+  beforeEach(() => {
+    loginPage.visit(); // Navigate to the login page before each test
+  });
+
+  it('should log in successfully with valid credentials', () => {
+    cy.fixture('loginCredentials').then((credentials) => {
+      loginPage.enterUsername(credentials.validUser);
+      loginPage.enterPassword(credentials.validPassword);
+      loginPage.clickLoginButton();
+      cy.url().should('include', '/app'); // Check if the URL includes /app
+      
+      // Verify the presence of specific elements on the dashboard
+     // dashboardPage.isUserLinkPresent();
+    //  dashboardPage.isLogoutButtonPresent();
     });
   });
-  
+
+  it('should show error with invalid credentials', () => {
+    cy.fixture('loginCredentials').then((credentials) => {
+      loginPage.enterUsername(credentials.invalidUser);
+      loginPage.enterPassword(credentials.invalidPassword);
+      loginPage.clickLoginButton();
+      loginPage.getErrorMessage().should('be.visible').and('contain', 'Opps!!'); // Check for error message
+    });
+  });
+});
