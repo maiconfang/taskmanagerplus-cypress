@@ -24,6 +24,8 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
+import 'cypress-axe';
+
 Cypress.Commands.add('login', (username, password) => {
     cy.visit('/');
     cy.get('#username').type(username);
@@ -31,3 +33,9 @@ Cypress.Commands.add('login', (username, password) => {
     cy.get('#loginButton').click();
   });
   
+
+
+Cypress.Commands.add('checkAccessibility', () => {
+  cy.injectAxe(); // Inject Axe for accessibility testing
+  cy.checkA11y(); // Check accessibility
+});
