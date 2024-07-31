@@ -4,13 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-     "test": "cypress run"
+    "test": "cypress run"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "cypress": "^13.13.1",
-    "cypress-mochawesome-reporter": "^3.8.2"
+    "cypress-mochawesome-reporter": "^3.8.2",
+    "cypress-xpath": "^2.0.1"
+  },
+  "dependencies": {
+    "cypress-real-events": "^1.13.0"
   }
 }
