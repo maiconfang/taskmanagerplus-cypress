@@ -30,7 +30,7 @@ module.exports = defineConfig({
   },
 
   e2e: {
-    baseUrl: 'http://localhost:4200',
+    baseUrl: 'http://localhost:4200/#/',
     specPattern: 'cypress/integration/**/*.spec.js',
     supportFile: 'cypress/support/e2e.js',
     setupNodeEvents(on, config) {

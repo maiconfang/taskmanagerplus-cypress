@@ -9,8 +9,6 @@ describe('Login Tests', () => {
   const dashboardPage = new DashboardPage();
 
 
-  let apiIsWorking = false;
-
   // Run before all tests
   before(() => {
     cy.checkFrontend();
