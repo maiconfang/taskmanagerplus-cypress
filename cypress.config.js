@@ -14,9 +14,25 @@ module.exports = defineConfig({
   video: true, // Enable video recording
   videoCompression: 32, // Set video compression (default: 32)
   
+  env: {
+    apiConfig: {
+      url: 'http://localhost:8080/oauth/token',
+      auth: {
+        username: 'maif-web',
+        password: 'web123'
+      },
+      body: {
+        username: 'luna.moon@maif.com',
+        password: '123',
+        grant_type: 'password'
+      }
+    }
+  },
+
   e2e: {
     baseUrl: 'http://localhost:4200',
     specPattern: 'cypress/integration/**/*.spec.js',
+    supportFile: 'cypress/support/e2e.js',
     setupNodeEvents(on, config) {
       on('before:run', async (details) => {
         console.log('override before:run');
@@ -28,6 +44,7 @@ module.exports = defineConfig({
         await afterRunHook();
       });
     },
+    
   },
 
 });

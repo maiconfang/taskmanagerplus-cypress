@@ -8,10 +8,19 @@ describe('Login Tests', () => {
   const loginPage = new LoginPage();
   const dashboardPage = new DashboardPage();
 
-  // Run before each test
+
+  let apiIsWorking = false;
+
+  // Run before all tests
+  before(() => {
+    cy.checkFrontend();
+    cy.checkBackend();
+  });
+
   beforeEach(() => {
     loginPage.visit(); // Navigate to the login page before each test
   });
+
 
   // Test case: Login with valid credentials
   it('should log in successfully with valid credentials', () => {
@@ -121,7 +130,7 @@ describe('Login Tests', () => {
   });
 
   // Test case: Mobile compatibility
-  it.only('should be responsive and functional on mobile devices', () => {
+  it('should be responsive and functional on mobile devices', () => {
     cy.fixture('loginCredentials').then((credentials) => {
       cy.viewport('iphone-6'); // Set the viewport to a mobile device
 
