@@ -17,6 +17,7 @@ module.exports = defineConfig({
   env: {
     apiConfig: {
       url: 'http://localhost:8080/oauth/token',
+      urlTask: 'http://localhost:8080/v1/tasks',
       auth: {
         username: 'maif-web',
         password: 'web123'

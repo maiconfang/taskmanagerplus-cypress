@@ -32,11 +32,21 @@ class TaskSearchPage {
         cy.get('#pagination-next-active').click(); // Click the Next button on the pagination
     }
 
-
     getTaskRows() {
         return cy.get('tbody tr');
     }
 
+    clickDeleteButton() {
+        cy.get('#task-search-action-remove-task').click(); // Click the Delete button
+    }
+
+    clickDialogYesButton() {
+        cy.get('#dialog-confirmation-yes').click(); // Click the Yes button on the dialog
+    }
+
+    captureSuccessMessage() {
+        return cy.get('div[role="alert"][aria-label="Successfully Removed"]');
+    }
 
 }
 

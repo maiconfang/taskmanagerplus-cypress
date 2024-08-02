@@ -42,4 +42,70 @@ Cypress.Commands.add('checkBackend', () => {
   });
 });
 
+Cypress.Commands.add('insertTask', (task, token) => {
+  const apiConfig = Cypress.env('apiConfig');
+  cy.request({
+      method: 'POST',
+      url: apiConfig.urlTask,
+      body: task,
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+      }
+  }).then(response => {
+      expect(response.status).to.eq(201); // Check if the record was created successfully
+      return response.body.id; // Return the record ID
+  });
+});
+
+
+Cypress.Commands.add('insertTaskIfNotExists', (task, token) => {
+  const apiConfig = Cypress.env('apiConfig');
+  
+  // Check if the task already exists before inserting it
+  cy.request({
+      method: 'GET',
+      url: `${apiConfig.urlTask}?description=${task.description}`,
+      headers: {
+          'Authorization': `Bearer ${token}`
+      }
+  }).then(response => {
+      const tasks = response.body._embedded ? response.body._embedded.tasks : [];
+      const existingTask = tasks.find(t => t.title === task.title && t.description === task.description);
+
+      if (!existingTask) {
+          cy.request({
+              method: 'POST',
+              url: apiConfig.urlTask,
+              body: task,
+              headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${token}`
+              }
+          }).then(response => {
+              expect(response.status).to.eq(201); // Check if the record was created successfully
+              return response.body.id; // Return the record ID
+          });
+      } else {
+          return existingTask.id; // Return the existing record ID
+      }
+  });
+});
+
+Cypress.Commands.add('deleteTaskById', (taskId, token) => {
+  const apiConfig = Cypress.env('apiConfig');
+  cy.request({
+      method: 'DELETE',
+      url: `${apiConfig.urlTask}/${taskId}`,
+      headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+      }
+  }).then(response => {
+      expect(response.status).to.eq(204); // Check if the task was deleted successfully
+  });
+});
+
+
+
 
