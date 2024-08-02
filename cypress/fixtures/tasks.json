@@ -1,0 +1,15 @@
+{
+    "deleteTask": {
+      "title": "Task to be deleted",
+      "description": "Description for Task deleted",
+      "dueDate": "2024-08-01",
+      "completed": false
+    },
+    "editTask": {
+      "title": "Task to be edited",
+      "description": "Description for Task to be edited",
+      "dueDate": "2024-08-02",
+      "completed": false
+    }
+  }
+  

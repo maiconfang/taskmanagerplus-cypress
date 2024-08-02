@@ -40,6 +40,10 @@ class TaskSearchPage {
         cy.get('#task-search-action-remove-task').click(); // Click the Delete button
     }
 
+    clickEditButton() {
+        cy.get('#task-search-action-update-task').click(); // Click the Edit button                 
+    }
+
     clickDialogYesButton() {
         cy.get('#dialog-confirmation-yes').click(); // Click the Yes button on the dialog
     }
