@@ -28,6 +28,10 @@ class TaskSearchPage {
         cy.get('#task-search-btn-consult-records').click(); // Click the Consult Records button
     }
 
+    clickPageNextButton() {
+        cy.get('#pagination-next-active').click(); // Click the Next button on the pagination
+    }
+
 
     getTaskRows() {
         return cy.get('tbody tr');

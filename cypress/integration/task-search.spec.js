@@ -73,4 +73,9 @@ describe('Task Search Page', () => {
         cy.get('i.fas.fa-trash').should('be.visible'); // Verify the presence of the delete button
     });
 
+    it.only('should display the description for Task 13 when clicking the next pagination button', () => {
+        taskSearchPage.clickPageNextButton();
+        taskSearchPage.getTaskRows().should('contain', 'Description for Task 13');
+    });
+
 });
