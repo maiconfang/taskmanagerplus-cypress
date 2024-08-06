@@ -1,5 +1,6 @@
 const { defineConfig } = require('cypress');
 const { beforeRunHook, afterRunHook } = require('cypress-mochawesome-reporter/lib');
+const queryTestDb = require('./cypress/support/db');
 
 module.exports = defineConfig({
   reporter: 'cypress-mochawesome-reporter',
@@ -38,6 +39,12 @@ module.exports = defineConfig({
       on('before:run', async (details) => {
         console.log('override before:run');
         await beforeRunHook(details);
+      });
+
+      on('task', {
+        queryDb: (query) => {
+          return queryTestDb(query);
+        }
       });
 
       on('after:run', async () => {

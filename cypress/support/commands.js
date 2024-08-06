@@ -1,6 +1,7 @@
 // cypress/support/commands.js
 
 import 'cypress-axe';
+const createConnection  = require('./db');
 
 Cypress.Commands.add('login', (username, password) => {
   cy.visit('/');
@@ -108,4 +109,21 @@ Cypress.Commands.add('deleteTaskById', (taskId, token) => {
 
 
 
+// Custom command to insert a task
+Cypress.Commands.add('insertTaskByDataBase', (title, description, dueDate, completed) => {
+  return cy.task('queryDb', `
+    INSERT INTO task (title, description, due_date, completed)
+    VALUES ('${title}', '${description}', '${dueDate}', ${completed});
+  `);
+});
 
+// Custom command to delete tasks based on a title pattern
+Cypress.Commands.add('deleteTasksByTitleLike', (titlePattern) => {
+  const query = `DELETE FROM task WHERE title LIKE '${titlePattern}'`;
+  return cy.task('queryDb', query);
+});
+
+// Command to query the database
+Cypress.Commands.add('queryDb', (query) => {
+  return cy.task('queryDb', query);
+});

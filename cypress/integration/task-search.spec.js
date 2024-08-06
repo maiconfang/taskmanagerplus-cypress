@@ -59,6 +59,7 @@ describe('Task Search Page', () => {
     });
 
 
+
     it('should search for a task by title', () => {
         taskSearchPage.enterTitle('Task 13');
         taskSearchPage.clickConsultRecordsButton();
@@ -119,101 +120,76 @@ describe('Task Search Page', () => {
         });
     });
 
-    // it.only('should edit the record Description for Task to be edited', () => {
-    //     cy.fixture('tasks').then((tasks) => {
-    //         const task = tasks.editTask;
-    //         cy.insertTaskIfNotExists(task, token).then(recordId => {
-    //             cy.wrap(recordId).as('recordId'); // Save the record ID for later use
+    it.skip('should insert a new task', () => {
+        const taskData = {
+            title: 'Task Maif Insert to be',
+            description: 'Description Maif Insert for Task to be',
+            dueDate: '2024-08-06',
+            completed: true
+        };
 
-    //             // Search and edit the task through the UI
-    //             taskSearchPage.enterDescription(task.description);
-    //             taskSearchPage.clickConsultRecordsButton();
-    //             taskSearchPage.getTaskRows().should('contain', task.description);
+        cy.insertTaskByDataBase(taskData.title, taskData.description, taskData.dueDate, taskData.completed).then((result) => {
+            expect(result.affectedRows).to.equal(1);
+        });
+    });
 
-    //             taskSearchPage.clickEditButton();
 
-    //             // Verify the presence of the task form
-    //             taskFormPage.getTitlePageTaskForm().should('contain', 'Edit of Task');
+    it.skip('should delete tasks by title pattern', () => {
+        const titlePattern = 'Task Maif%'; // Pattern of the title you want to delete
 
-    //             // Clear and edit operations here...
-    //             taskFormPage.enterTitle('Updated Title for Task');
-    //             taskFormPage.enterDescription('Updated Description for Task');
-    //             taskFormPage.selectCompleted();
-    //             taskFormPage.enterDueDate('2024-07-22');
-
-    //             taskFormPage.clickLabelPageTitle();
-
-    //             // Save the changes
-    //             taskFormPage.clickSaveButton();
-    //             taskFormPage.clickBackSearchButton();
-
-    //             // Search and edit the task through the UI
-    //             taskSearchPage.enterDescription('Updated Description for Task');
-    //             taskSearchPage.clickConsultRecordsButton();
-    //             taskSearchPage.getTaskRows().should('contain', 'Updated Description for Task');
-    //         });
-    //     });
-    // });
-
+        cy.deleteTasksByTitleLike(titlePattern).then((result) => {
+            expect(result).to.have.property('affectedRows').and.to.be.greaterThan(0);
+        });
+    });
 
     it.only('should edit the record Description for Task to be edited', () => {
-        const updatedTaskDescription = 'Updated Description for Task';
-        cy.fixture('tasks').then((tasks) => {
-            const task = tasks.editTask;
+        const updatedTaskDescription = 'Task Maif Updated Description for Task';
 
-            cy.insertTaskIfNotExists(task, token).then(recordId => {
-                cy.wrap(recordId).as('recordId'); // Save the record ID for later use
+        const titlePattern = 'Task Maif%'; // Pattern of the title you want to delete
 
-                const apiConfig = Cypress.env('apiConfig');
-
-                // Check if the updated record already exists
-                cy.request({
-                    method: 'GET',
-                    url: `${apiConfig.urlTask}?description=${updatedTaskDescription}`,
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                }).then(response => {
-                    const tasks = response.body._embedded ? response.body._embedded.tasks : [];
-                    const existingUpdatedTask = tasks.find(t => t.title === 'Updated Title for Task' && t.description === updatedTaskDescription);
-
-                    if (!existingUpdatedTask) {
-                        // Search and edit the task through the UI
-                        taskSearchPage.enterDescription(task.description);
-                        taskSearchPage.clickConsultRecordsButton();
-                        taskSearchPage.getTaskRows().should('contain', task.description);
-
-                        taskSearchPage.clickEditButton();
-
-                        // Verify the presence of the task form
-                        taskFormPage.getTitlePageTaskForm().should('contain', 'Edit of Task');
-
-                        // Edit operations here...
-                        taskFormPage.enterTitle('Updated Title for Task');
-                        taskFormPage.enterDescription(updatedTaskDescription);
-                        taskFormPage.selectCompleted(true);
-                        taskFormPage.enterDueDate('2024-07-22');
-
-
-                        taskFormPage.clickLabelPageTitle();
-
-                        // Save the changes
-                        taskFormPage.clickSaveButton();
-                        taskFormPage.clickBackSearchButton();
-
-                        // Verifying the task is updated
-                        taskSearchPage.enterDescription(updatedTaskDescription);
-                        taskSearchPage.clickConsultRecordsButton();
-                        taskSearchPage.getTaskRows().should('contain', updatedTaskDescription);
-                    } else {
-                        // Search and verify the updated task through the UI
-                        taskSearchPage.enterDescription(updatedTaskDescription);
-                        taskSearchPage.clickConsultRecordsButton();
-                        taskSearchPage.getTaskRows().should('contain', updatedTaskDescription);
-                    }
-                });
-            });
+        cy.deleteTasksByTitleLike(titlePattern).then((result) => {
+            expect(result).to.have.property('affectedRows').and.to.be.at.least(0); // Ensure no errors even if no records are deleted
         });
+
+        const taskData = {
+            title: 'Task Maif Insert to be',
+            description: 'Description Maif Insert for Task to be',
+            dueDate: '2024-08-06',
+            completed: true
+        };
+
+        cy.insertTaskByDataBase(taskData.title, taskData.description, taskData.dueDate, taskData.completed).then((result) => {
+            expect(result.affectedRows).to.equal(1);
+        });
+
+        // Search and edit the task through the UI
+        taskSearchPage.enterDescription(taskData.description);
+        taskSearchPage.clickConsultRecordsButton();
+        taskSearchPage.getTaskRows().should('contain', taskData.description);
+
+        taskSearchPage.clickEditButton();
+
+        // Verify the presence of the task form
+        taskFormPage.getTitlePageTaskForm().should('contain', 'Edit of Task');
+
+        // Edit operations here...
+        taskFormPage.enterTitle('Task Maif Updated Title for Task');
+        taskFormPage.enterDescription(updatedTaskDescription);
+        taskFormPage.selectCompleted(true);
+        taskFormPage.enterDueDate('2024-07-22');
+
+
+        taskFormPage.clickLabelPageTitle();
+
+        // Save the changes
+        taskFormPage.clickSaveButton();
+        taskFormPage.clickBackSearchButton();
+
+        // Verifying the task is updated
+        taskSearchPage.enterDescription(updatedTaskDescription);
+        taskSearchPage.clickConsultRecordsButton();
+        taskSearchPage.getTaskRows().should('contain', updatedTaskDescription);
+
     });
 
 
