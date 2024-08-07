@@ -117,6 +117,27 @@ Cypress.Commands.add('insertTaskByDataBase', (title, description, dueDate, compl
   `);
 });
 
+
+// Custom command to insert a task and return the ID of the created record
+Cypress.Commands.add('insertTaskAndReturnId', (title, description, dueDate, completed) => {
+  // console.log('Inserting task:', title, description, dueDate, completed);
+  return cy.task('queryDb', `
+    INSERT INTO task (title, description, due_date, completed)
+    VALUES ('${title}', '${description}', '${dueDate}', ${completed ? 1 : 0});
+  `).then((insertResult) => {
+    // console.log('Insert result:', insertResult);
+    const insertedId = insertResult.insertId;
+    // console.log('Inserted ID:', insertedId);
+    return insertedId;
+  });
+});
+
+
+
+
+
+
+
 // Custom command to delete tasks based on a title pattern
 Cypress.Commands.add('deleteTasksByTitleLike', (titlePattern) => {
   const query = `DELETE FROM task WHERE title LIKE '${titlePattern}'`;

@@ -24,12 +24,16 @@ class TaskFormPage {
         cy.get('#task-register-description').clear();
     }
 
-   enterDueDate(dueDate) {
+    enterDueDate(dueDate) {
         cy.get('#task-register-duedate').clear().type(dueDate);
     }
 
+    clickDueDate() {
+        cy.get('#task-register-duedate').click();
+    }
+
     clearDueDate() {
-        cy.get('#task-register-due-date').clear();
+        cy.get('#task-register-duedate').clear();
     }
 
     selectCompleted() {
@@ -44,7 +48,25 @@ class TaskFormPage {
         cy.get('#task-register-btn-back').click();
     }
 
-    
+
+    // Method to verify if the save button is disabled
+    verifySaveButtonDisabled() {
+        cy.get('#task-register-btn-save-task').should('be.disabled');
+    }
+
+    // Method to capture all error messages and verify if they match the expected messages
+    verifyErrorMessages(expectedErrorMessages) {
+        cy.get('.fas.fa-exclamation-circle').parent().each(($el, index) => {
+            cy.wrap($el).invoke('text').then((text) => {
+                expect(expectedErrorMessages).to.include(text.trim());
+            });
+        });
+
+        // Verify if the number of error messages on the page matches the number of expected messages
+        cy.get('.fas.fa-exclamation-circle').parent().should('have.length', expectedErrorMessages.length);
+    }
+
+
 }
 
 export default TaskFormPage;

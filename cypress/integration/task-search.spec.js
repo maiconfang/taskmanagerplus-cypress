@@ -1,11 +1,10 @@
 // cypress/integration/task-search.spec.js
-// import TaskSearchPage from '../../support/TaskSearchPage';
 import TaskSearchPage from '../page-objects/TaskSearchPage';
 import LoginPage from '../page-objects/loginPage';
 import TaskFormPage from '../page-objects/taskFormPage';
 import DashboardPage from '../page-objects/dashboardPage';
 import 'cypress-real-events/support';
-import axios from 'axios';
+import { it } from 'mocha';
 
 
 describe('Task Search Page', () => {
@@ -142,7 +141,7 @@ describe('Task Search Page', () => {
         });
     });
 
-    it.only('should edit the record Description for Task to be edited', () => {
+    it('should edit the record Description for Task to be edited', () => {
         const updatedTaskDescription = 'Task Maif Updated Description for Task';
 
         const titlePattern = 'Task Maif%'; // Pattern of the title you want to delete
@@ -189,6 +188,15 @@ describe('Task Search Page', () => {
         taskSearchPage.enterDescription(updatedTaskDescription);
         taskSearchPage.clickConsultRecordsButton();
         taskSearchPage.getTaskRows().should('contain', updatedTaskDescription);
+
+    });
+
+    it('should navigate to the "New Task" screen when the "Create Record" button is clicked', () => {
+        // Click on the "Create Record" button
+        taskSearchPage.clickCreateRecordButton();
+
+        // Verify the presence of the task form
+        taskFormPage.getTitlePageTaskForm().should('contain', 'New Task');
 
     });
 
